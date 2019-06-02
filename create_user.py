@@ -1,5 +1,6 @@
 import mysql.connector
 import hashlib
+import os
 
 users = [
     ('user1', 'password1'),
@@ -8,10 +9,10 @@ users = [
 
 try:
     conn = mysql.connector.connect(
-        user='app',
-        password='sapham',
-        host='127.0.0.1',
-        database='app'
+        user=os.environ.get('MYSQL_USER'),
+        password=os.environ.get('MYSQL_PASSWORD'),
+        host=os.environ.get('MYSQL_HOST', 'mysql'),
+        database=os.environ.get('MYSQL_DATABASE')
     )
     cur = conn.cursor()
 
