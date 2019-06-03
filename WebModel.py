@@ -2,12 +2,12 @@
 Model-Based Security Testing Web
 """
 
-import mysql.connector
-import hashlib
+import requests
 
 mode = 'Initializing'  # can't call it 'state', that has special meaning
 usersLoggedIn = list()
 
+login_url = 'http://localhost:5000/login'
 
 def Initialize():
     global mode
@@ -19,23 +19,17 @@ def InitializeEnabled():
 
 def Login(user, passwd):
     try:
-        conn = mysql.connector.connect(
-            user='app',
-            password='sapham',
-            host='127.0.0.1',
-            database='app'
-        )
-        cur = conn.cursor()
-        sql = """
-        SELECT * from users where username='{}'
-        """.format(user)
-        print(sql)
-        cur.execute(sql)
-        for (id, username, password) in cur:
-            if password == hashlib.md5(passwd):
-                usersLoggedIn.append(user) 
-                return 'Correct'
-        return 'Incorrect'
+        body = {
+            'username': user,
+            'password': passwd
+        }
+        r = requests.post(url, json=body)
+        if r.content == 'Correct':
+            print("OK")
+            global mode, usersLoggedIn
+            usersLoggedIn.append(user)
+            mode = 'LogedIn'
+        return r.content
     except mysql.connector.Error as err:
         print(err)
     finally:
