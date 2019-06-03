@@ -33,8 +33,8 @@ def login():
         cur.execute(sql)
         for (id, username, password) in cur:
             if password == hashlib.md5(passwd).hexdigest():
-                return 'Correct'
-        return 'Incorrect'
+                return 'Correct', 200
+        return 'Incorrect', 401
     except mysql.connector.Error as err:
         print(err)
     finally:

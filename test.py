@@ -4,9 +4,9 @@ Test Cases
 
 cases = [
     ("WebModel Login",
-    "pmt TestLogin"),
+    "pmt TestLogin WebModel"),
     ("WebModel Analyze",
-    "pma TestLogin"),
+    "pma TestLogin WebModel"),
     ("WebModel Generate Graph",
     "pmg TestLoginFSM"),
     ("WebModel Create SVG File",

@@ -23,32 +23,28 @@ def Login(user, passwd):
             'username': user,
             'password': passwd
         }
-        r = requests.post(url, json=body)
+        r = requests.post(login_url, json=body)
         if r.content == 'Correct':
-            print("OK")
-            global mode, usersLoggedIn
-            usersLoggedIn.append(user)
+            global mode
             mode = 'LogedIn'
         return r.content
-    except mysql.connector.Error as err:
+    except Exception as err:
         print(err)
-    finally:
-        conn.close()
 
 def LoginEnabled(user, passwd):
     return (mode == 'Running' and user not in usersLoggedIn)
 
 
 
-state = ('mode', 'usersLoggedIn')
+state = ('mode',)
 
-actions = (Initialize, Login,)
+actions = (Login, Initialize)
 
 
-# users = ['VinniPuhh', 'OleBrumm', 'user1']
-# passwords = ['Correct', 'Incorrect', 'password1']
+users = ['VinniPuhh', 'OleBrumm', 'user1']
+passwords = ['Correct', 'Incorrect', 'password1']
 
-# domains = { Login: {'user': users, 'passwd': passwords}}
+domains = { Login: {'user': users, 'passwd': passwords}}
 
 enablers = { Initialize:(InitializeEnabled,), Login: (LoginEnabled,)}
 
