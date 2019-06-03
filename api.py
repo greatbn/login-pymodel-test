@@ -16,22 +16,23 @@ def login():
     if "password" not in data:
         return "password is required", 400
     print(data)
-
+    conn = mysql.connector.connect(
+        user=os.environ.get('MYSQL_USER', 'app'),
+        password=os.environ.get('MYSQL_PASSWORD', 'sapham'),
+        host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
+        database=os.environ.get('MYSQL_DATABASE', 'app')
+    )
     try:
-        conn = mysql.connector.connect(
-            user=os.environ.get('MYSQL_USER'),
-            password=os.environ.get('MYSQL_PASSWORD'),
-            host=os.environ.get('MYSQL_HOST', 'mysql'),
-            database=os.environ.get('MYSQL_DATABASE')
-        )
+        user = data['username']
+        passwd = data['password']
+
         cur = conn.cursor()
         sql = """
         SELECT * from users where username='{}'
         """.format(user)
         cur.execute(sql)
         for (id, username, password) in cur:
-            if password == hashlib.md5(passwd):
-                usersLoggedIn.append(user) 
+            if password == hashlib.md5(passwd).hexdigest():
                 return 'Correct'
         return 'Incorrect'
     except mysql.connector.Error as err:
