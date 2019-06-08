@@ -9,10 +9,10 @@ users = [
 
 try:
     conn = mysql.connector.connect(
-        user=os.environ.get('MYSQL_USER'),
-        password=os.environ.get('MYSQL_PASSWORD'),
-        host=os.environ.get('MYSQL_HOST', 'mysql'),
-        database=os.environ.get('MYSQL_DATABASE')
+        user=os.environ.get('MYSQL_USER', 'app'),
+        password=os.environ.get('MYSQL_PASSWORD', 'password1'),
+        host=os.environ.get('MYSQL_HOST', 'localhost'),
+        database=os.environ.get('MYSQL_DATABASE', 'app')
     )
     cur = conn.cursor()
 
@@ -20,7 +20,11 @@ try:
     DROP TABLE users
     """
     print("Drop table users if exists")
-    cur.execute(sql)
+    try:
+        cur.execute(sql)
+    except Exception:
+        pass
+
     print("Create table users")
     sql = """
     CREATE TABLE IF NOT EXISTS `users`(
@@ -35,11 +39,11 @@ try:
     print("Insert user to table users")
 
     for user in users:
-        password = hashlib.md5(user[1]).hexdigest()
+        # password = hashlib.md5(user[1]).hexdigest()
         sql = """
         INSERT INTO users(username, password)
         VALUES ('{}', '{}')
-        """.format(user[0], password)
+        """.format(user[0], user[1])
         cur.execute(sql)
     
     conn.commit()

@@ -11,6 +11,8 @@ app = Flask(__name__)
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
+    if not data:
+        return "Body data is required", 400
     if "username" not in data:
         return "username is required", 400
     if "password" not in data:
@@ -18,7 +20,7 @@ def login():
     print(data)
     conn = mysql.connector.connect(
         user=os.environ.get('MYSQL_USER', 'app'),
-        password=os.environ.get('MYSQL_PASSWORD', 'sapham'),
+        password=os.environ.get('MYSQL_PASSWORD', 'password1'),
         host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
         database=os.environ.get('MYSQL_DATABASE', 'app')
     )
@@ -28,12 +30,12 @@ def login():
 
         cur = conn.cursor()
         sql = """
-        SELECT * from users where username='{}'
-        """.format(user)
+        SELECT * from users where username='{}' and password='{}'
+        """.format(user, passwd)
         cur.execute(sql)
-        for (id, username, password) in cur:
-            if password == hashlib.md5(passwd).hexdigest():
-                return 'Correct', 200
+        record = cur.fetchone()
+        if record:
+            return 'Correct', 200
         return 'Incorrect', 401
     except mysql.connector.Error as err:
         print(err)
@@ -42,4 +44,4 @@ def login():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run(host="0.0.0.0")
