@@ -5,10 +5,10 @@ services:
     ports:
       - 127.0.0.1:3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: sapham
+      MYSQL_ROOT_PASSWORD: password1
       MYSQL_DATABASE: app
       MYSQL_USER: app
-      MYSQL_PASSWORD: sapham
+      MYSQL_PASSWORD: password1
   
   api:
     build: .
@@ -17,5 +17,5 @@ services:
     environment:
       MYSQL_DATABASE: app
       MYSQL_USER: app
-      MYSQL_PASSWORD: sapham
+      MYSQL_PASSWORD: password1
       MYSQL_HOST: mysql

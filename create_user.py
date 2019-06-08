@@ -9,10 +9,10 @@ users = [
 
 try:
     conn = mysql.connector.connect(
-        user=os.environ.get('MYSQL_USER'),
-        password=os.environ.get('MYSQL_PASSWORD'),
-        host=os.environ.get('MYSQL_HOST', 'mysql'),
-        database=os.environ.get('MYSQL_DATABASE')
+        user=os.environ.get('MYSQL_USER', 'app'),
+        password=os.environ.get('MYSQL_PASSWORD', 'password1'),
+        host=os.environ.get('MYSQL_HOST', 'localhost'),
+        database=os.environ.get('MYSQL_DATABASE', 'app')
     )
     cur = conn.cursor()
 
@@ -20,7 +20,10 @@ try:
     DROP TABLE users
     """
     print("Drop table users if exists")
-    cur.execute(sql)
+    try:
+        cur.execute(sql)
+    except:
+        pass
     print("Create table users")
     sql = """
     CREATE TABLE IF NOT EXISTS `users`(

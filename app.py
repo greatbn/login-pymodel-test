@@ -18,7 +18,7 @@ def login():
     print(data)
     conn = mysql.connector.connect(
         user=os.environ.get('MYSQL_USER', 'app'),
-        password=os.environ.get('MYSQL_PASSWORD', 'sapham'),
+        password=os.environ.get('MYSQL_PASSWORD', 'password1'),
         host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
         database=os.environ.get('MYSQL_DATABASE', 'app')
     )
